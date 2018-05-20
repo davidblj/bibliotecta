@@ -18,9 +18,10 @@ public class Bibliotecario {
 	}
 
 	public void prestar(String isbn) {
-
 		
-		if (!this.esPrestado(isbn)) {
+		boolean prestamoValido = !this.esPrestado(isbn) && !this.esPalindromo(isbn); 
+				
+		if (prestamoValido) {
 			
 			Libro libro = this.repositorioLibro.obtenerPorIsbn(isbn);
 			Prestamo prestamo = new Prestamo(libro);
@@ -35,15 +36,21 @@ public class Bibliotecario {
 	public boolean esPrestado(String isbn) {
 		
 		Libro libro = this.repositorioPrestamo.obtenerLibroPrestadoPorIsbn(isbn);
-		// Prestamo prestamo = this.repositorioPrestamo(isbn);
 		
-		if (libro != null) {
-			
+		if (libro != null) {			
 			// get current date ? 
 			return true;
 		}
 		
 		return false;
+	}
+	
+	
+	public boolean esPalindromo(String isbn) {
+		
+		 StringBuilder handler = new StringBuilder(isbn);
+		 String reves = handler.reverse().toString();		
+		 return reves.equals(isbn);			 
 	}
 
 }

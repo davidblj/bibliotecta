@@ -79,4 +79,28 @@ public class BibliotecarioTest {
 			Assert.assertEquals(Bibliotecario.EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE, e.getMessage());
 		}
 	}
+	
+	@Test
+	public void prestarLibroPalindromo() {
+		
+		// arrange
+		Libro libro = new LibroTestDataBuilder()				
+				.conIsbn("4242")
+				.build();
+			
+		repositorioLibros.agregar(libro);	
+		Bibliotecario blibliotecario = new Bibliotecario(repositorioLibros, repositorioPrestamo);
+		
+		try {
+			
+			// act
+			blibliotecario.prestar(libro.getIsbn());
+			
+		} catch (PrestamoException e) {
+			
+			// assert
+			System.out.println(e.getMessage());
+			Assert.assertEquals(Bibliotecario.EL_LIBRO_ES_PALINDROMO, e.getMessage());
+		}
+	}
 }

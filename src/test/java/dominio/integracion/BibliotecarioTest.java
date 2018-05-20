@@ -56,7 +56,6 @@ public class BibliotecarioTest {
 		// assert
 		Assert.assertTrue(blibliotecario.esPrestado(libro.getIsbn()));
 		Assert.assertNotNull(repositorioPrestamo.obtenerLibroPrestadoPorIsbn(libro.getIsbn()));
-
 	}
 
 	@Test
@@ -82,7 +81,7 @@ public class BibliotecarioTest {
 	}
 	
 	@Test
-	public void prestarLibroPalindromo() {
+	public void prestarLibroPalindromoTest() {
 		
 		// arrange
 		Libro libro = new LibroTestDataBuilder()				

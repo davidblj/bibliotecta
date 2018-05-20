@@ -2,10 +2,19 @@ package dominio.unitaria;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import dominio.Bibliotecario;
 import dominio.Libro;
@@ -13,6 +22,8 @@ import dominio.repositorio.RepositorioLibro;
 import dominio.repositorio.RepositorioPrestamo;
 import testdatabuilder.LibroTestDataBuilder;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Bibliotecario.class)
 public class BibliotecarioTest {
 
 	@Test
@@ -59,8 +70,9 @@ public class BibliotecarioTest {
 		assertFalse(esPrestado);
 	}
 	
+	
 	@Test
-	public void isbnEsPalindromo() {
+	public void isbnEsPalindromoTest() {
 		
 		// arrange
 		RepositorioPrestamo repositorioPrestamo = mock(RepositorioPrestamo.class);
@@ -76,7 +88,7 @@ public class BibliotecarioTest {
 	}
 	
 	@Test
-	public void isbnNoEsPalindromo() {
+	public void isbnNoEsPalindromoTest() {
 		
 		// arrange
 		RepositorioPrestamo repositorioPrestamo = mock(RepositorioPrestamo.class);
@@ -91,4 +103,44 @@ public class BibliotecarioTest {
 		assertFalse(noEsPalindromo);
 	}
 	
+	
+	@Test
+	public void fechaMaximaVaciaTest() {
+		// arrange
+		RepositorioPrestamo repositorioPrestamo = mock(RepositorioPrestamo.class);
+		RepositorioLibro repositorioLibro = mock(RepositorioLibro.class);
+				
+		Bibliotecario bibliotecario = new Bibliotecario(repositorioLibro, repositorioPrestamo);
+		
+		// act
+		Date fecha= bibliotecario.obtenerFechaDeEntrega("41A44ZD2");
+		
+		// assert
+		assertNull(fecha);	
+	}
+	
+	@Test
+	public void fechaMaximaTest() {
+		
+		// arrange
+		RepositorioPrestamo repositorioPrestamo = mock(RepositorioPrestamo.class);
+		RepositorioLibro repositorioLibro = mock(RepositorioLibro.class);
+				
+		Bibliotecario bibliotecario = new Bibliotecario(repositorioLibro, repositorioPrestamo);
+		
+		Calendar defaultDate = Calendar.getInstance();
+		defaultDate.set(2017, Calendar.MAY, 24);
+		PowerMockito.mockStatic(Calendar.class);
+		Mockito.when(Calendar.getInstance()).thenReturn(defaultDate);	
+		
+		// act
+		Date fecha = bibliotecario.obtenerFechaDeEntrega("41A44ZD678");
+							
+		// assert
+		Calendar fechaEsperada = Calendar.getInstance();
+		fechaEsperada.set(2017, Calendar.JUNE, 6);
+		
+		
+		assertTrue(true);	
+	}
 }

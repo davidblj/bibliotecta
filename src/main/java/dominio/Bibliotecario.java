@@ -18,10 +18,8 @@ public class Bibliotecario {
 
 	}
 
-	public void prestar(String isbn) {
-		
-		boolean prestamoValido = !this.esPrestado(isbn) && !this.esPalindromo(isbn);
-		
+	public void prestar(String isbn, String nombreUsuario) {
+				
 		if (this.esPrestado(isbn)) {
 			throw new PrestamoException(this.EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE);
 		}
@@ -31,7 +29,7 @@ public class Bibliotecario {
 		}
 		
 		Libro libro = this.repositorioLibro.obtenerPorIsbn(isbn);
-		Prestamo prestamo = new Prestamo(libro);
+		Prestamo prestamo = new Prestamo(libro, nombreUsuario);
 		this.repositorioPrestamo.agregar(prestamo);			
 	}
 

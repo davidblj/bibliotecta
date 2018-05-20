@@ -56,6 +56,10 @@ public class PrestamoEntity {
 		return fechaEntregaMaxima;
 	}
 	
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+	
 	public String getNombreUsuario() {
 		return nombreUsuario;
 	}

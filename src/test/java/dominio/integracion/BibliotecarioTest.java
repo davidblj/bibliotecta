@@ -18,6 +18,7 @@ import testdatabuilder.LibroTestDataBuilder;
 public class BibliotecarioTest {
 
 	private static final String CRONICA_DE_UNA_MUERTA_ANUNCIADA = "Cronica de una muerta anunciada";
+	private static final String DAVID_JARAMILLO_BOLIVAR = "David Jaramillo Bolivar";
 	
 	private SistemaDePersistencia sistemaPersistencia;
 	
@@ -50,7 +51,7 @@ public class BibliotecarioTest {
 		Bibliotecario blibliotecario = new Bibliotecario(repositorioLibros, repositorioPrestamo);
 
 		// act
-		blibliotecario.prestar(libro.getIsbn());
+		blibliotecario.prestar(libro.getIsbn(), DAVID_JARAMILLO_BOLIVAR);
 
 		// assert
 		Assert.assertTrue(blibliotecario.esPrestado(libro.getIsbn()));
@@ -67,10 +68,10 @@ public class BibliotecarioTest {
 		Bibliotecario blibliotecario = new Bibliotecario(repositorioLibros, repositorioPrestamo);
 
 		// act
-		blibliotecario.prestar(libro.getIsbn());
+		blibliotecario.prestar(libro.getIsbn(), DAVID_JARAMILLO_BOLIVAR);
 		try {
 			
-			blibliotecario.prestar(libro.getIsbn());
+			blibliotecario.prestar(libro.getIsbn(), DAVID_JARAMILLO_BOLIVAR);
 			fail();
 			
 		} catch (PrestamoException e) {
@@ -85,7 +86,7 @@ public class BibliotecarioTest {
 		
 		// arrange
 		Libro libro = new LibroTestDataBuilder()				
-				.conIsbn("4242")
+				.conIsbn("4224")
 				.build();
 			
 		repositorioLibros.agregar(libro);	
@@ -94,7 +95,8 @@ public class BibliotecarioTest {
 		try {
 			
 			// act
-			blibliotecario.prestar(libro.getIsbn());
+			blibliotecario.prestar(libro.getIsbn(), DAVID_JARAMILLO_BOLIVAR);
+			fail();
 			
 		} catch (PrestamoException e) {
 			

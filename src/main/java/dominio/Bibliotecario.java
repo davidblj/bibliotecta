@@ -19,7 +19,6 @@ public class Bibliotecario {
 
 	public void prestar(String isbn) {
 
-		// throw new UnsupportedOperationException("M�todo pendiente por implementar");
 		
 		if (!this.esPrestado(isbn)) {
 			
@@ -35,9 +34,12 @@ public class Bibliotecario {
 
 	public boolean esPrestado(String isbn) {
 		
-		Prestamo prestamo = this.repositorioPrestamo.obtener(isbn);
+		Libro libro = this.repositorioPrestamo.obtenerLibroPrestadoPorIsbn(isbn);
+		// Prestamo prestamo = this.repositorioPrestamo(isbn);
 		
-		if (prestamo != null) {
+		if (libro != null) {
+			
+			// get current date ? 
 			return true;
 		}
 		

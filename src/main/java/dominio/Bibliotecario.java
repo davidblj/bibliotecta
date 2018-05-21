@@ -24,13 +24,17 @@ public class Bibliotecario {
 	public void prestar(String isbn, String nombreUsuario) {		
 				
 		if (this.esPrestado(isbn))
-			throw new PrestamoException(this.EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE);		
+			throw new PrestamoException(EL_LIBRO_NO_SE_ENCUENTRA_DISPONIBLE);		
 		
 		if (this.esPalindromo(isbn))
-			throw new PrestamoException(this.EL_LIBRO_ES_PALINDROMO);		
+			throw new PrestamoException(EL_LIBRO_ES_PALINDROMO);		
 		
 		Libro libro = this.repositorioLibro.obtenerPorIsbn(isbn);
-		Prestamo prestamo = new Prestamo(libro, nombreUsuario);
+		
+		Date fechaDeEntrega = this.obtenerFechaDeEntrega(isbn);
+		Date fechaDeSolicitud = new Date();
+		
+		Prestamo prestamo = new Prestamo(fechaDeSolicitud, libro, fechaDeEntrega, nombreUsuario);
 		this.repositorioPrestamo.agregar(prestamo);			
 	}
 
@@ -82,7 +86,7 @@ public class Bibliotecario {
 			if (diaDeLaSemana != Calendar.SUNDAY) contador++;						
 			calendario.add(Calendar.DAY_OF_MONTH, 1);										
 		}
-			
+
 		return calendario.getTime(); 	
 	}
 	

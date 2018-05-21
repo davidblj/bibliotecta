@@ -2,6 +2,8 @@ package dominio.integracion;
 
 import static org.junit.Assert.fail;
 
+import java.util.Date;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,6 +11,7 @@ import org.junit.Test;
 
 import dominio.Bibliotecario;
 import dominio.Libro;
+import dominio.Prestamo;
 import dominio.excepcion.PrestamoException;
 import dominio.repositorio.RepositorioLibro;
 import dominio.repositorio.RepositorioPrestamo;
@@ -49,13 +52,16 @@ public class BibliotecarioTest {
 		Libro libro = new LibroTestDataBuilder().conTitulo(CRONICA_DE_UNA_MUERTA_ANUNCIADA).build();
 		repositorioLibros.agregar(libro);
 		Bibliotecario blibliotecario = new Bibliotecario(repositorioLibros, repositorioPrestamo);
-
+				
 		// act
 		blibliotecario.prestar(libro.getIsbn(), DAVID_JARAMILLO_BOLIVAR);
 
 		// assert
 		Assert.assertTrue(blibliotecario.esPrestado(libro.getIsbn()));
 		Assert.assertNotNull(repositorioPrestamo.obtenerLibroPrestadoPorIsbn(libro.getIsbn()));
+		
+		String usuarioDelPrestamo = repositorioPrestamo.obtener(libro.getIsbn()).getNombreUsuario(); 
+		Assert.assertEquals(usuarioDelPrestamo, DAVID_JARAMILLO_BOLIVAR);
 	}
 
 	@Test
@@ -81,7 +87,7 @@ public class BibliotecarioTest {
 	}
 	
 	@Test
-	public void prestarLibroPalindromoTest() {
+	public void prestarLibroDeExhibicionTest() {
 		
 		// arrange
 		Libro libro = new LibroTestDataBuilder()				
@@ -103,5 +109,32 @@ public class BibliotecarioTest {
 			System.out.println(e.getMessage());
 			Assert.assertEquals(Bibliotecario.EL_LIBRO_ES_PALINDROMO, e.getMessage());
 		}
+	}
+	
+	@Test
+	public void prestarLibroSinFechaLimiteTest() {
+
+		// arrange
+		Libro libro = new LibroTestDataBuilder()
+				.conTitulo(CRONICA_DE_UNA_MUERTA_ANUNCIADA)
+				.conIsbn("A489Z429A").build();
+		
+		repositorioLibros.agregar(libro);
+		Bibliotecario blibliotecario = new Bibliotecario(repositorioLibros, repositorioPrestamo);
+				
+		// act
+		blibliotecario.prestar(libro.getIsbn(), DAVID_JARAMILLO_BOLIVAR);
+
+		// assert
+		Assert.assertTrue(blibliotecario.esPrestado(libro.getIsbn()));
+		Assert.assertNotNull(repositorioPrestamo.obtenerLibroPrestadoPorIsbn(libro.getIsbn()));
+		
+		Prestamo prestamo = repositorioPrestamo.obtener(libro.getIsbn());
+		
+		String usuarioDelPrestamo = prestamo.getNombreUsuario(); 
+		Assert.assertEquals(usuarioDelPrestamo, DAVID_JARAMILLO_BOLIVAR);
+		
+		Date fechaLimite = prestamo.getFechaEntregaMaxima();
+		Assert.assertNull(fechaLimite);
 	}
 }

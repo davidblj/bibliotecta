@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.h2.util.DateTimeUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -130,17 +131,20 @@ public class BibliotecarioTest {
 		
 		Calendar defaultDate = Calendar.getInstance();
 		defaultDate.set(2017, Calendar.MAY, 24);
+		
 		PowerMockito.mockStatic(Calendar.class);
 		Mockito.when(Calendar.getInstance()).thenReturn(defaultDate);	
 		
 		// act
-		Date fecha = bibliotecario.obtenerFechaDeEntrega("41A44ZD678");
+		Date fechaDeEntrega = bibliotecario.obtenerFechaDeEntrega("41A44ZD678");		
 							
 		// assert
-		Calendar fechaEsperada = Calendar.getInstance();
-		fechaEsperada.set(2017, Calendar.JUNE, 6);
+		Calendar fechaEsperadaHelper = Calendar.getInstance();
+		fechaEsperadaHelper.set(2017, Calendar.JUNE, 9);
 		
+		Date fechaEsperada = fechaEsperadaHelper.getTime();		
 		
-		assertTrue(true);	
+		boolean fechasCoinciden = fechaDeEntrega.getTime() == fechaEsperada.getTime();		
+		assertTrue(fechasCoinciden);	
 	}
 }

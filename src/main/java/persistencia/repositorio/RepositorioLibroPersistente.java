@@ -31,8 +31,7 @@ public class RepositorioLibroPersistente implements RepositorioLibro, Repositori
 
 	@Override
 	public void agregar(Libro libro) {
-		
-		// do move this logic in to the jpa api
+				
 		entityManager.persist(LibroBuilder.convertirAEntity(libro));
 	}
 

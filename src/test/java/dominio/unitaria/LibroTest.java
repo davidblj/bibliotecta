@@ -11,7 +11,7 @@ public class LibroTest {
 
 	private static final int ANIO = 2010;
 	private static final String ISBN = "1234";
-	private static final String NOMBRE_LIBRO = "Cien años de soledad";
+	private static final String NOMBRE_LIBRO = "Cien aï¿½os de soledad";
 
 	@Test
 	public void crearLibroTest() {
@@ -30,5 +30,4 @@ public class LibroTest {
 		assertEquals(ISBN, libro.getIsbn());
 		assertEquals(ANIO, libro.getAnio());
 	}
-
 }

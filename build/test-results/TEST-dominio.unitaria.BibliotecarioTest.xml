@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dominio.unitaria.BibliotecarioTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2018-05-21T20:38:27" hostname="Sarah" time="0.119">
+  <properties/>
+  <testcase name="isbnEsPalindromoTest" classname="dominio.unitaria.BibliotecarioTest" time="0.079"/>
+  <testcase name="isbnNoEsPalindromoTest" classname="dominio.unitaria.BibliotecarioTest" time="0.001"/>
+  <testcase name="fechaMaximaVaciaTest" classname="dominio.unitaria.BibliotecarioTest" time="0.001"/>
+  <testcase name="fechaMaximaTest" classname="dominio.unitaria.BibliotecarioTest" time="0.03"/>
+  <testcase name="libroNoPrestadoTest" classname="dominio.unitaria.BibliotecarioTest" time="0.005"/>
+  <testcase name="esPrestadoTest" classname="dominio.unitaria.BibliotecarioTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

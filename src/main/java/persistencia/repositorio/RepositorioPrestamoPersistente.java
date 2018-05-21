@@ -28,15 +28,11 @@ public class RepositorioPrestamoPersistente implements RepositorioPrestamo {
 		this.entityManager = entityManager;
 		this.repositorioLibroJPA = (RepositorioLibroJPA) repositorioLibro;
 	}
-	
-	// SERVICE API
-
+		
 	@Override
 	public void agregar(Prestamo prestamo) {
 
-		PrestamoEntity prestamoEntity = buildPrestamoEntity(prestamo);
-		
-		// todo: add a new interface ('repositoryPrestamoJPA') method: persistirPrestramo
+		PrestamoEntity prestamoEntity = buildPrestamoEntity(prestamo);		
 		entityManager.persist(prestamoEntity);
 	}
 
@@ -44,11 +40,9 @@ public class RepositorioPrestamoPersistente implements RepositorioPrestamo {
 	public Libro obtenerLibroPrestadoPorIsbn(String isbn) {
 
 		PrestamoEntity prestamoEntity = obtenerPrestamoEntityPorIsbn(isbn);
-
 		return LibroBuilder.convertirADominio(prestamoEntity != null ? prestamoEntity.getLibro() : null);
 	}
 	
-	// todo: add a new interface ('repositorioPrestamo') method: ObtenerPrestamoPorIsbn()
 	@Override
 	public Prestamo obtener(String isbn) {
 
@@ -64,38 +58,28 @@ public class RepositorioPrestamoPersistente implements RepositorioPrestamo {
 		return null;		
 	}
 
-	
-	// DB API
-	
-	// todo: add a new interface ('repositoryPrestamoJPA') method: obtenerPrestamoEntityPorIsbn
+		
 	@SuppressWarnings("rawtypes")
 	private PrestamoEntity obtenerPrestamoEntityPorIsbn(String isbn) {
 
 		Query query = entityManager.createNamedQuery(PRESTAMO_FIND_BY_ISBN);
 		query.setParameter(ISBN, isbn);
-
 		List resultList = query.getResultList();
 
 		return !resultList.isEmpty() ? (PrestamoEntity) resultList.get(0) : null;
 	}
 	
 	
-	// HELPERS
-
-	/* 
-	 * fetch the book information to store a new loan
-	 * */
 	private PrestamoEntity buildPrestamoEntity(Prestamo prestamo) {
 
 		LibroEntity libroEntity = repositorioLibroJPA.obtenerLibroEntityPorIsbn(prestamo.getLibro().getIsbn());
-
 		PrestamoEntity prestamoEntity = new PrestamoEntity();
-		prestamoEntity.setLibro(libroEntity);
+		
 		prestamoEntity.setFechaSolicitud(prestamo.getFechaSolicitud());
+		prestamoEntity.setLibro(libroEntity);		
+		prestamoEntity.setFechaEntregaMaxima(prestamo.getFechaEntregaMaxima());
 		prestamoEntity.setNombreUsuario(prestamo.getNombreUsuario());
 
 		return prestamoEntity;
-	}
-
-	
+	}	
 }

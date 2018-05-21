@@ -1,13 +1,20 @@
 package dominio.integracion;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import dominio.Bibliotecario;
 import dominio.Libro;
@@ -18,6 +25,8 @@ import dominio.repositorio.RepositorioPrestamo;
 import persistencia.sistema.SistemaDePersistencia;
 import testdatabuilder.LibroTestDataBuilder;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Bibliotecario.class)
 public class BibliotecarioTest {
 
 	private static final String CRONICA_DE_UNA_MUERTA_ANUNCIADA = "Cronica de una muerta anunciada";
@@ -117,7 +126,7 @@ public class BibliotecarioTest {
 		// arrange
 		Libro libro = new LibroTestDataBuilder()
 				.conTitulo(CRONICA_DE_UNA_MUERTA_ANUNCIADA)
-				.conIsbn("A489Z429A").build();
+				.conIsbn("A48B").build();
 		
 		repositorioLibros.agregar(libro);
 		Bibliotecario blibliotecario = new Bibliotecario(repositorioLibros, repositorioPrestamo);
@@ -134,7 +143,46 @@ public class BibliotecarioTest {
 		String usuarioDelPrestamo = prestamo.getNombreUsuario(); 
 		Assert.assertEquals(usuarioDelPrestamo, DAVID_JARAMILLO_BOLIVAR);
 		
-		Date fechaLimite = prestamo.getFechaEntregaMaxima();
-		Assert.assertNull(fechaLimite);
+		Date fechaDeEntrega = prestamo.getFechaEntregaMaxima();
+		Assert.assertNull(fechaDeEntrega);
+	}
+	
+	
+	@Test
+	public void prestarLibroConFechaLimiteTest() {
+
+		// arrange
+		Libro libro = new LibroTestDataBuilder()
+				.conTitulo(CRONICA_DE_UNA_MUERTA_ANUNCIADA)
+				.conIsbn("A489Z429A").build();
+		
+		repositorioLibros.agregar(libro);
+		Bibliotecario blibliotecario = new Bibliotecario(repositorioLibros, repositorioPrestamo);
+		
+		Calendar defaultDate = Calendar.getInstance();
+		defaultDate.set(2017, Calendar.MAY, 24);
+		
+		PowerMockito.mockStatic(Calendar.class);
+		Mockito.when(Calendar.getInstance()).thenReturn(defaultDate);
+				
+		// act
+		blibliotecario.prestar(libro.getIsbn(), DAVID_JARAMILLO_BOLIVAR);
+
+		// assert
+		Assert.assertTrue(blibliotecario.esPrestado(libro.getIsbn()));
+		Assert.assertNotNull(repositorioPrestamo.obtenerLibroPrestadoPorIsbn(libro.getIsbn()));
+		
+		Prestamo prestamo = repositorioPrestamo.obtener(libro.getIsbn());
+		
+		String usuarioDelPrestamo = prestamo.getNombreUsuario(); 
+		Assert.assertEquals(usuarioDelPrestamo, DAVID_JARAMILLO_BOLIVAR);
+		
+		Date fechaDeEntrega = prestamo.getFechaEntregaMaxima();		
+		Calendar fechaEsperadaHelper = Calendar.getInstance();
+		fechaEsperadaHelper.set(2017, Calendar.JUNE, 9);		
+		Date fechaEsperada = fechaEsperadaHelper.getTime();		
+		
+		boolean fechasCoinciden = fechaDeEntrega.getTime() == fechaEsperada.getTime();		
+		assertTrue(fechasCoinciden);
 	}
 }
